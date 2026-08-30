@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login - IMRAN CUSTOMER MANAGEMENT</title>
+
+    <link rel="stylesheet" href="login.css">
+
+</head>
+
+<body>
+
+
+<div class="login-container">
+
+
+    <!-- LEFT SIDE -->
+
+    <div class="login-left">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                IC
+            </div>
+
+            <div>
+                <h2>IMRAN</h2>
+
+                <span>
+                    CUSTOMER MANAGEMENT
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="welcome">
+
+            <h1>
+                Manage Your Business
+                <br>
+                <span>Smarter & Faster.</span>
+            </h1>
+
+            <p>
+                Manage customers, orders, products
+                and business activities from one
+                powerful dashboard.
+            </p>
+
+        </div>
+
+
+        <div class="features">
+
+            <div>
+                <span>✓</span>
+                Customer Management
+            </div>
+
+            <div>
+                <span>✓</span>
+                Order Management
+            </div>
+
+            <div>
+                <span>✓</span>
+                Product Management
+            </div>
+
+            <div>
+                <span>✓</span>
+                Business Reports
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- RIGHT SIDE -->
+
+    <div class="login-right">
+
+        <div class="login-box">
+
+
+            <div class="mobile-logo">
+
+                <div class="brand-icon">
+                    IC
+                </div>
+
+                <h2>
+                    IMRAN CUSTOMER MANAGEMENT
+                </h2>
+
+            </div>
+
+
+            <div class="login-title">
+
+                <h1>
+                    Welcome Back 👋
+                </h1>
+
+                <p>
+                    Login to access your dashboard
+                </p>
+
+            </div>
+
+
+            <!-- ERROR MESSAGE -->
+
+            <div
+                class="error-message"
+                id="errorMessage"
+            >
+                Invalid username or password.
+            </div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form id="loginForm">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Username
+                    </label>
+
+                    <div class="input-box">
+
+                        <span>👤</span>
+
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter username"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <div class="input-box">
+
+                        <span>🔒</span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="show-password"
+                            id="showPassword"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="login-options">
+
+                    <label class="remember">
+
+                        <input
+                            type="checkbox"
+                            id="remember"
+                        >
+
+                        <span>
+                            Remember me
+                        </span>
+
+                    </label>
+
+
+                    <a href="#" id="forgotPassword">
+                        Forgot Password?
+                    </a>
+
+                </div>
+
+
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                    id="loginBtn"
+                >
+
+                    <span id="loginBtnText">
+                        Login
+                    </span>
+
+                    <span
+                        id="loginLoader"
+                        class="loader"
+                    ></span>
+
+                </button>
+
+
+            </form>
+
+
+            <div class="demo-info">
+
+                <strong>Demo Login</strong>
+
+                <p>
+                    Username:
+                    <b>admin</b>
+                </p>
+
+                <p>
+                    Password:
+                    <b>123456</b>
+                </p>
+
+            </div>
+
+
+            <div class="copyright">
+
+                © 2026 IMRAN CUSTOMER MANAGEMENT
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   LOGIN SYSTEM
+===================================================== */
+
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const username =
+    document.getElementById("username");
+
+const password =
+    document.getElementById("password");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const loginBtn =
+    document.getElementById("loginBtn");
+
+const loginBtnText =
+    document.getElementById("loginBtnText");
+
+const loginLoader =
+    document.getElementById("loginLoader");
+
+
+
+/* =====================================================
+   CHECK ALREADY LOGGED IN
+===================================================== */
+
+if(
+    localStorage.getItem("imranLoggedIn")
+    === "true"
+){
+
+    window.location.href = "index.html";
+
+}
+
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+loginForm.addEventListener(
+    "submit",
+    function(e){
+
+        e.preventDefault();
+
+
+        const user =
+            username.value.trim();
+
+        const pass =
+            password.value;
+
+
+        /* Hide old error */
+
+        errorMessage.classList.remove(
+            "show"
+        );
+
+
+        /* Demo credentials */
+
+        if(
+            user === "admin" &&
+            pass === "123456"
+        ){
+
+            /* Show loading */
+
+            loginBtn.disabled = true;
+
+            loginBtnText.style.display =
+                "none";
+
+            loginLoader.style.display =
+                "inline-block";
+
+
+            /*
+             * Save login status
+             */
+
+            localStorage.setItem(
+                "imranLoggedIn",
+                "true"
+            );
+
+
+            localStorage.setItem(
+                "imranUsername",
+                user
+            );
+
+
+            /*
+             * Remember me
+             */
+
+            if(
+                document.getElementById(
+                    "remember"
+                ).checked
+            ){
+
+                localStorage.setItem(
+                    "imranRemember",
+                    "true"
+                );
+
+            }
+
+
+            /*
+             * Redirect
+             */
+
+            setTimeout(
+                function(){
+
+                    window.location.href =
+                        "index.html";
+
+                },
+                700
+            );
+
+
+        }else{
+
+            /* Invalid login */
+
+            errorMessage.classList.add(
+                "show"
+            );
+
+            password.value = "";
+
+            password.focus();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   SHOW / HIDE PASSWORD
+===================================================== */
+
+const showPassword =
+    document.getElementById(
+        "showPassword"
+    );
+
+
+showPassword.addEventListener(
+    "click",
+    function(){
+
+        if(
+            password.type === "password"
+        ){
+
+            password.type = "text";
+
+            showPassword.innerText = "🙈";
+
+        }else{
+
+            password.type = "password";
+
+            showPassword.innerText = "👁";
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   FORGOT PASSWORD
+===================================================== */
+
+document
+    .getElementById("forgotPassword")
+    .addEventListener(
+        "click",
+        function(e){
+
+            e.preventDefault();
+
+            alert(
+                "Password recovery will be connected with the backend in the next step."
+            );
+
+        }
+    );
+
+</script>
+
+</body>
+</html>

@@ -5,6 +5,53 @@
 
 
 /* =====================================================
+   LOGIN PROTECTION
+   Dashboard খুলতে Login করা থাকতে হবে
+===================================================== */
+
+if (
+    localStorage.getItem("imranLoggedIn") !== "true"
+) {
+
+    window.location.href = "login.html";
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout() {
+
+    const confirmLogout =
+        confirm("Are you sure you want to logout?");
+
+    if (!confirmLogout) {
+        return;
+    }
+
+
+    localStorage.removeItem("imranLoggedIn");
+    localStorage.removeItem("imranUsername");
+    localStorage.removeItem("imranRemember");
+
+
+    window.location.href = "login.html";
+
+}
+
+
+/* =====================================================
+   MAKE LOGOUT AVAILABLE FROM HTML
+   onclick="logout()" হলেও কাজ করবে
+===================================================== */
+
+window.logout = logout;
+
+
+
+/* =====================================================
    PAGE NAVIGATION
 ===================================================== */
 
@@ -81,9 +128,15 @@ function showPage(pageName){
 
     /* Close mobile sidebar */
 
-    document
-        .getElementById("sidebar")
-        .classList.remove("open");
+    const sidebarElement =
+        document.getElementById("sidebar");
+
+
+    if(sidebarElement){
+
+        sidebarElement.classList.remove("open");
+
+    }
 
 }
 
@@ -122,11 +175,15 @@ const sidebar =
     document.getElementById("sidebar");
 
 
-mobileMenu.addEventListener("click", function(){
+if(mobileMenu && sidebar){
 
-    sidebar.classList.toggle("open");
+    mobileMenu.addEventListener("click", function(){
 
-});
+        sidebar.classList.toggle("open");
+
+    });
+
+}
 
 
 /* =====================================================
@@ -155,56 +212,84 @@ const cancelOrder =
 
 function openOrderModal(){
 
-    orderModal.classList.add("show");
+    if(orderModal){
+
+        orderModal.classList.add("show");
+
+    }
 
 }
 
 
 function closeModal(){
 
-    orderModal.classList.remove("show");
+    if(orderModal){
+
+        orderModal.classList.remove("show");
+
+    }
 
 }
 
 
-createOrderBtn.addEventListener(
-    "click",
-    openOrderModal
-);
+if(createOrderBtn){
+
+    createOrderBtn.addEventListener(
+        "click",
+        openOrderModal
+    );
+
+}
 
 
-ordersCreateBtn.addEventListener(
-    "click",
-    openOrderModal
-);
+if(ordersCreateBtn){
+
+    ordersCreateBtn.addEventListener(
+        "click",
+        openOrderModal
+    );
+
+}
 
 
-closeOrderModal.addEventListener(
-    "click",
-    closeModal
-);
+if(closeOrderModal){
+
+    closeOrderModal.addEventListener(
+        "click",
+        closeModal
+    );
+
+}
 
 
-cancelOrder.addEventListener(
-    "click",
-    closeModal
-);
+if(cancelOrder){
+
+    cancelOrder.addEventListener(
+        "click",
+        closeModal
+    );
+
+}
 
 
 /* Close modal by clicking outside */
 
-orderModal.addEventListener(
-    "click",
-    function(e){
+if(orderModal){
 
-        if(e.target === orderModal){
+    orderModal.addEventListener(
+        "click",
+        function(e){
 
-            closeModal();
+            if(e.target === orderModal){
+
+                closeModal();
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 /* =====================================================
@@ -215,43 +300,58 @@ const orderForm =
     document.getElementById("orderForm");
 
 
-orderForm.addEventListener(
-    "submit",
-    function(e){
+if(orderForm){
 
-        e.preventDefault();
+    orderForm.addEventListener(
+        "submit",
+        function(e){
 
-
-        const customerName =
-            document.getElementById(
-                "customerName"
-            ).value.trim();
+            e.preventDefault();
 
 
-        if(customerName === ""){
+            const customerName =
+                document.getElementById(
+                    "customerName"
+                );
+
+
+            if(!customerName){
+
+                return;
+
+            }
+
+
+            const customerNameValue =
+                customerName.value.trim();
+
+
+            if(customerNameValue === ""){
+
+                alert(
+                    "Please enter customer name."
+                );
+
+                return;
+
+            }
+
 
             alert(
-                "Please enter customer name."
+                "Order created successfully for "
+                + customerNameValue
+                + "!"
             );
 
-            return;
+
+            orderForm.reset();
+
+            closeModal();
 
         }
+    );
 
-
-        alert(
-            "Order created successfully for "
-            + customerName
-            + "!"
-        );
-
-
-        orderForm.reset();
-
-        closeModal();
-
-    }
-);
+}
 
 
 /* =====================================================
@@ -262,71 +362,75 @@ const globalSearch =
     document.getElementById("globalSearch");
 
 
-globalSearch.addEventListener(
-    "input",
-    function(){
+if(globalSearch){
 
-        const search =
-            globalSearch.value
-            .toLowerCase()
-            .trim();
+    globalSearch.addEventListener(
+        "input",
+        function(){
 
-
-        /* Search dashboard orders */
-
-        const dashboardRows =
-            document.querySelectorAll(
-                "#dashboardOrders tr"
-            );
+            const search =
+                globalSearch.value
+                .toLowerCase()
+                .trim();
 
 
-        dashboardRows.forEach(function(row){
+            /* Search dashboard orders */
 
-            const text =
-                row.innerText.toLowerCase();
-
-
-            if(text.includes(search)){
-
-                row.style.display = "";
-
-            }else{
-
-                row.style.display = "none";
-
-            }
-
-        });
+            const dashboardRows =
+                document.querySelectorAll(
+                    "#dashboardOrders tr"
+                );
 
 
-        /* Search all orders */
+            dashboardRows.forEach(function(row){
 
-        const orderRows =
-            document.querySelectorAll(
-                "#ordersTable tr"
-            );
+                const text =
+                    row.innerText.toLowerCase();
 
 
-        orderRows.forEach(function(row){
+                if(text.includes(search)){
 
-            const text =
-                row.innerText.toLowerCase();
+                    row.style.display = "";
+
+                }else{
+
+                    row.style.display = "none";
+
+                }
+
+            });
 
 
-            if(text.includes(search)){
+            /* Search all orders */
 
-                row.style.display = "";
+            const orderRows =
+                document.querySelectorAll(
+                    "#ordersTable tr"
+                );
 
-            }else{
 
-                row.style.display = "none";
+            orderRows.forEach(function(row){
 
-            }
+                const text =
+                    row.innerText.toLowerCase();
 
-        });
 
-    }
-);
+                if(text.includes(search)){
+
+                    row.style.display = "";
+
+                }else{
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+    );
+
+}
 
 
 /* =====================================================
@@ -405,17 +509,21 @@ const chartFilter =
     document.getElementById("chartFilter");
 
 
-chartFilter.addEventListener(
-    "change",
-    function(){
+if(chartFilter){
 
-        console.log(
-            "Chart filter changed to:",
-            chartFilter.value
-        );
+    chartFilter.addEventListener(
+        "change",
+        function(){
 
-    }
-);
+            console.log(
+                "Chart filter changed to:",
+                chartFilter.value
+            );
+
+        }
+    );
+
+}
 
 
 /* =====================================================
@@ -428,16 +536,20 @@ const addCustomerBtn =
     );
 
 
-addCustomerBtn.addEventListener(
-    "click",
-    function(){
+if(addCustomerBtn){
 
-        alert(
-            "Customer creation form will be connected here."
-        );
+    addCustomerBtn.addEventListener(
+        "click",
+        function(){
 
-    }
-);
+            alert(
+                "Customer creation form will be connected here."
+            );
+
+        }
+    );
+
+}
 
 
 /* =====================================================
@@ -450,16 +562,20 @@ const addProductBtn =
     );
 
 
-addProductBtn.addEventListener(
-    "click",
-    function(){
+if(addProductBtn){
 
-        alert(
-            "Product creation form will be connected here."
-        );
+    addProductBtn.addEventListener(
+        "click",
+        function(){
 
-    }
-);
+            alert(
+                "Product creation form will be connected here."
+            );
+
+        }
+    );
+
+}
 
 
 /* =====================================================
@@ -472,16 +588,20 @@ const notificationBtn =
     );
 
 
-notificationBtn.addEventListener(
-    "click",
-    function(){
+if(notificationBtn){
 
-        alert(
-            "You have 5 new notifications."
-        );
+    notificationBtn.addEventListener(
+        "click",
+        function(){
 
-    }
-);
+            alert(
+                "You have 5 new notifications."
+            );
+
+        }
+    );
+
+}
 
 
 /* =====================================================
@@ -564,6 +684,34 @@ document.addEventListener(
 
         console.log(
             "IMRAN CUSTOMER MANAGEMENT loaded successfully."
+        );
+
+
+        /* Show logged-in username if element exists */
+
+        const username =
+            localStorage.getItem(
+                "imranUsername"
+            );
+
+
+        const usernameElements =
+            document.querySelectorAll(
+                ".username, .user-name, #loggedUsername"
+            );
+
+
+        usernameElements.forEach(
+            function(element){
+
+                if(username){
+
+                    element.textContent =
+                        username;
+
+                }
+
+            }
         );
 
     }

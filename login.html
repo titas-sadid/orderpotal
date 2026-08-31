@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,9 +123,10 @@
 
             <div
                 class="error-message"
-                id="errorMessage"
-            >
+                id="errorMessage">
+
                 Invalid username or password.
+
             </div>
 
 
@@ -132,6 +134,8 @@
 
             <form id="loginForm">
 
+
+                <!-- USERNAME -->
 
                 <div class="form-group">
 
@@ -157,6 +161,8 @@
 
 
 
+                <!-- PASSWORD -->
+
                 <div class="form-group">
 
                     <label>
@@ -178,9 +184,10 @@
                         <button
                             type="button"
                             class="show-password"
-                            id="showPassword"
-                        >
+                            id="showPassword">
+
                             👁
+
                         </button>
 
                     </div>
@@ -188,6 +195,8 @@
                 </div>
 
 
+
+                <!-- LOGIN OPTIONS -->
 
                 <div class="login-options">
 
@@ -205,19 +214,24 @@
                     </label>
 
 
-                    <a href="#" id="forgotPassword">
+                    <a
+                        href="#"
+                        id="forgotPassword">
+
                         Forgot Password?
+
                     </a>
 
                 </div>
 
 
 
+                <!-- LOGIN BUTTON -->
+
                 <button
                     type="submit"
                     class="login-btn"
-                    id="loginBtn"
-                >
+                    id="loginBtn">
 
                     <span id="loginBtnText">
                         Login
@@ -225,8 +239,9 @@
 
                     <span
                         id="loginLoader"
-                        class="loader"
-                    ></span>
+                        class="loader">
+
+                    </span>
 
                 </button>
 
@@ -234,9 +249,28 @@
             </form>
 
 
+
+            <!-- CREATE ACCOUNT -->
+
+            <div class="create-account">
+
+                Don't have an account?
+
+                <a href="register.html">
+                    Create Account
+                </a>
+
+            </div>
+
+
+
+            <!-- DEMO LOGIN -->
+
             <div class="demo-info">
 
-                <strong>Demo Login</strong>
+                <strong>
+                    Demo Login
+                </strong>
 
                 <p>
                     Username:
@@ -250,6 +284,9 @@
 
             </div>
 
+
+
+            <!-- COPYRIGHT -->
 
             <div class="copyright">
 
@@ -265,6 +302,7 @@
 </div>
 
 
+
 <script>
 
 /* =====================================================
@@ -272,26 +310,54 @@
 ===================================================== */
 
 
+/* Get Elements */
+
 const loginForm =
-    document.getElementById("loginForm");
+    document.getElementById(
+        "loginForm"
+    );
 
-const username =
-    document.getElementById("username");
 
-const password =
-    document.getElementById("password");
+const usernameInput =
+    document.getElementById(
+        "username"
+    );
+
+
+const passwordInput =
+    document.getElementById(
+        "password"
+    );
+
 
 const errorMessage =
-    document.getElementById("errorMessage");
+    document.getElementById(
+        "errorMessage"
+    );
+
 
 const loginBtn =
-    document.getElementById("loginBtn");
+    document.getElementById(
+        "loginBtn"
+    );
+
 
 const loginBtnText =
-    document.getElementById("loginBtnText");
+    document.getElementById(
+        "loginBtnText"
+    );
+
 
 const loginLoader =
-    document.getElementById("loginLoader");
+    document.getElementById(
+        "loginLoader"
+    );
+
+
+const remember =
+    document.getElementById(
+        "remember"
+    );
 
 
 
@@ -300,11 +366,35 @@ const loginLoader =
 ===================================================== */
 
 if(
-    localStorage.getItem("imranLoggedIn")
-    === "true"
+    localStorage.getItem(
+        "imranLoggedIn"
+    ) === "true"
 ){
 
-    window.location.href = "index.html";
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* =====================================================
+   REMEMBER USERNAME
+===================================================== */
+
+const savedUsername =
+    localStorage.getItem(
+        "imranRememberUsername"
+    );
+
+
+if(savedUsername){
+
+    usernameInput.value =
+        savedUsername;
+
+    remember.checked =
+        true;
 
 }
 
@@ -322,102 +412,214 @@ loginForm.addEventListener(
 
 
         const user =
-            username.value.trim();
+            usernameInput.value
+                .trim();
+
 
         const pass =
-            password.value;
+            passwordInput.value;
 
 
-        /* Hide old error */
+
+        /* Hide previous error */
 
         errorMessage.classList.remove(
             "show"
         );
 
 
-        /* Demo credentials */
+
+        /* =================================================
+           DEFAULT ADMIN ACCOUNT
+        ================================================= */
 
         if(
             user === "admin" &&
             pass === "123456"
         ){
 
-            /* Show loading */
+            loginSuccess(
+                "admin"
+            );
 
-            loginBtn.disabled = true;
+            return;
 
-            loginBtnText.style.display =
-                "none";
-
-            loginLoader.style.display =
-                "inline-block";
+        }
 
 
-            /*
-             * Save login status
-             */
 
-            localStorage.setItem(
-                "imranLoggedIn",
-                "true"
+        /* =================================================
+           GET REGISTERED USERS
+        ================================================= */
+
+        let users = [];
+
+
+        try{
+
+            users =
+                JSON.parse(
+                    localStorage.getItem(
+                        "imranUsers"
+                    )
+                ) || [];
+
+        }catch(error){
+
+            users = [];
+
+        }
+
+
+
+        /* =================================================
+           FIND USER
+        ================================================= */
+
+        const foundUser =
+            users.find(
+                function(item){
+
+                    return (
+
+                        item.username
+                            .toLowerCase()
+                        ===
+                        user.toLowerCase()
+
+                    )
+
+                    &&
+
+                    item.password ===
+                    pass;
+
+                }
             );
 
 
-            localStorage.setItem(
-                "imranUsername",
-                user
+
+        /* =================================================
+           USER FOUND
+        ================================================= */
+
+        if(foundUser){
+
+            loginSuccess(
+                foundUser.username
             );
-
-
-            /*
-             * Remember me
-             */
-
-            if(
-                document.getElementById(
-                    "remember"
-                ).checked
-            ){
-
-                localStorage.setItem(
-                    "imranRemember",
-                    "true"
-                );
-
-            }
-
-
-            /*
-             * Redirect
-             */
-
-            setTimeout(
-                function(){
-
-                    window.location.href =
-                        "index.html";
-
-                },
-                700
-            );
-
 
         }else{
 
-            /* Invalid login */
+            /* Login failed */
+
+            errorMessage.textContent =
+                "Invalid username or password.";
 
             errorMessage.classList.add(
                 "show"
             );
 
-            password.value = "";
 
-            password.focus();
+            passwordInput.value = "";
+
+
+            passwordInput.focus();
 
         }
 
     }
 );
+
+
+
+/* =====================================================
+   LOGIN SUCCESS
+===================================================== */
+
+function loginSuccess(
+    loggedUsername
+){
+
+    /* Disable button */
+
+    loginBtn.disabled =
+        true;
+
+
+    /* Hide Login text */
+
+    loginBtnText.style.display =
+        "none";
+
+
+    /* Show loading */
+
+    loginLoader.style.display =
+        "inline-block";
+
+
+
+    /* Save Login Status */
+
+    localStorage.setItem(
+        "imranLoggedIn",
+        "true"
+    );
+
+
+    /* Save Username */
+
+    localStorage.setItem(
+        "imranUsername",
+        loggedUsername
+    );
+
+
+
+    /* Remember Me */
+
+    if(
+        remember.checked
+    ){
+
+        localStorage.setItem(
+            "imranRememberUsername",
+            loggedUsername
+        );
+
+        localStorage.setItem(
+            "imranRemember",
+            "true"
+        );
+
+    }else{
+
+        localStorage.removeItem(
+            "imranRememberUsername"
+        );
+
+        localStorage.removeItem(
+            "imranRemember"
+        );
+
+    }
+
+
+
+    /* Redirect */
+
+    setTimeout(
+        function(){
+
+            window.location.href =
+                "index.html";
+
+        },
+        700
+    );
+
+}
 
 
 
@@ -436,18 +638,25 @@ showPassword.addEventListener(
     function(){
 
         if(
-            password.type === "password"
+            passwordInput.type ===
+            "password"
         ){
 
-            password.type = "text";
+            passwordInput.type =
+                "text";
 
-            showPassword.innerText = "🙈";
+
+            showPassword.innerText =
+                "🙈";
 
         }else{
 
-            password.type = "password";
+            passwordInput.type =
+                "password";
 
-            showPassword.innerText = "👁";
+
+            showPassword.innerText =
+                "👁";
 
         }
 
@@ -461,12 +670,15 @@ showPassword.addEventListener(
 ===================================================== */
 
 document
-    .getElementById("forgotPassword")
+    .getElementById(
+        "forgotPassword"
+    )
     .addEventListener(
         "click",
         function(e){
 
             e.preventDefault();
+
 
             alert(
                 "Password recovery will be connected with the backend in the next step."
@@ -477,5 +689,7 @@ document
 
 </script>
 
+
 </body>
 </html>
+```

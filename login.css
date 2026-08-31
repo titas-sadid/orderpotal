@@ -808,3 +808,36 @@ body{
     }
 
 }
+/* =====================================================
+   CREATE ACCOUNT LINK
+===================================================== */
+
+.create-account{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    color:#64748b;
+
+    font-size:11px;
+
+}
+
+
+.create-account a{
+
+    color:#2563eb;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+}
+
+
+.create-account a:hover{
+
+    text-decoration:underline;
+
+}

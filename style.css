@@ -2217,3 +2217,40 @@ tr:hover{
     }
 
 }
+
+/* =====================================================
+   LOGOUT BUTTON
+===================================================== */
+
+.logout-section{
+    margin-top:auto;
+    padding:15px 0 0;
+}
+
+.logout-btn{
+    width:100%;
+    border:1px solid rgba(255,255,255,.08);
+    background:#1e293b;
+    color:#fca5a5;
+    padding:11px 13px;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.logout-btn:hover{
+    background:#7f1d1d;
+    color:white;
+    transform:translateY(-1px);
+}
+
+.logout-btn span:first-child{
+    width:22px;
+    text-align:center;
+    font-size:16px;
+}

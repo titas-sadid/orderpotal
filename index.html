@@ -84,6 +84,14 @@
 
         <div class="sidebar-bottom">
 
+            <!-- ================= LOGOUT ================= -->
+            <div class="logout-section">
+                <button type="button" class="logout-btn" id="logoutBtn" onclick="logout()">
+                    <span class="logout-icon">🚪</span>
+                    <span>Logout</span>
+                </button>
+            </div>
+
             <div class="help-box">
                 <div class="help-icon">?</div>
 
@@ -143,7 +151,7 @@
                     </div>
 
                     <div class="admin-info">
-                        <strong>Imran</strong>
+                        <strong id="loggedUsername">Imran</strong>
                         <small>Administrator</small>
                     </div>
 
@@ -171,7 +179,7 @@
                         <h1>Dashboard</h1>
 
                         <p>
-                            Welcome back, Imran! Here's what's happening today.
+                            Welcome back, <span id="welcomeUsername">Imran</span>! Here's what's happening today.
                         </p>
                     </div>
 
@@ -1514,6 +1522,14 @@
 
 
     <script src="app.js"></script>
+
+<style>
+/* Logout button */
+.logout-section{margin-bottom:14px;}
+.logout-btn{width:100%;display:flex;align-items:center;gap:10px;border:0;background:transparent;color:inherit;padding:11px 14px;border-radius:8px;cursor:pointer;font:inherit;text-align:left;transition:.2s;}
+.logout-btn:hover{background:rgba(220,38,38,.10);color:#dc2626;}
+.logout-icon{font-size:16px;}
+</style>
 
 </body>
 </html>
